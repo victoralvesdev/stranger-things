@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+*:focus {
+    outline: none;
+}
+
+*:focus-visible {
+    outline: none;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #000000;
+    color: #ffffff;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(229, 9, 20, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(229, 9, 20, 0.1) 0%, transparent 50%),
+        linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
+    z-index: -1;
+}
+
+#root {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    body::before {
+        background:
+            radial-gradient(circle at 20% 50%, rgba(229, 9, 20, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(229, 9, 20, 0.1) 0%, transparent 50%),
+            linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
+    }
+}
+
