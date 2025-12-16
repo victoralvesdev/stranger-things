@@ -186,6 +186,7 @@ function App() {
     const [city, setCity] = useState('');
     const [shippingFee, setShippingFee] = useState(null);
     const [loadingCep, setLoadingCep] = useState(false);
+    const [showCepField, setShowCepField] = useState(false);
     const wheelContainerRef = useRef(null);
 
     useEffect(() => {
@@ -255,7 +256,8 @@ function App() {
                     const productStartPosition = middleIndex * itemWidth;
                     const productCenterPosition = productStartPosition + (itemActualWidth / 2);
                     const containerCenter = containerWidth / 2;
-                    const initialTargetPosition = containerCenter - productCenterPosition + 200; // Mesmo offset
+                    // Centralizar exatamente o item do meio na seta
+                    const initialTargetPosition = containerCenter - productCenterPosition;
                     
                     setInitialPrize(middlePrize);
                     setInitialPosition(initialTargetPosition);
@@ -458,11 +460,11 @@ function App() {
             requestAnimationFrame(animate);
         } else {
             // Fallback para setTimeout se não conseguir usar requestAnimationFrame
-            setTimeout(() => {
+        setTimeout(() => {
                 // Garantir que sempre seja o Kit Completo
                 const kitCompleto = prizes.find(p => p.name === 'Kit Completo') || randomPrize;
                 setSelectedPrize(kitCompleto);
-                setSpinning(false);
+            setSpinning(false);
             }, 5000);
         }
     };
@@ -480,6 +482,7 @@ function App() {
     const handleContinue = () => {
         // Sempre mostrar modal de checkout quando clicar em continuar
         if (selectedPrize) {
+            setShowCepField(false);
             setShowCheckoutModal(true);
         } else {
             closeWheel();
@@ -600,7 +603,7 @@ function App() {
                                     <img src={selectedPrize.image} alt={selectedPrize.name} />
                                 </div>
                                 <h3 className="prize-result-title">PARABÉNS!</h3>
-                                <p className="prize-result-text">Você ganhou: <strong>{selectedPrize.name}</strong></p>
+                                <p className="prize-result-text">Você ganhou: <strong>Kit Completo</strong></p>
                                 <button className="netflix-btn" onClick={handleContinue}>
                                     CONTINUAR
                                 </button>
@@ -636,34 +639,61 @@ function App() {
                         <img src={kitCompletoPrize?.image || '/images/kitcompleto.jpg'} alt="Kit Completo" />
                     </div>
                     
-                    <p className="checkout-message">
-                        Precisamos apenas que informe seu CEP para verificar apenas a taxa de envio
-                    </p>
-                    
-                    <div className="cep-container">
-                        <input
-                            type="text"
-                            className="cep-input"
-                            placeholder="00000-000"
-                            value={cep}
-                            onChange={handleCepChange}
-                            maxLength={9}
-                        />
-                        {loadingCep && <div className="loading-spinner">Carregando...</div>}
+                    <div className="checkout-items">
+                        <p className="checkout-message">
+                            Você ganhou totalmente de graça pela parceria com a Netflix para o lançamento da última temporada de Stranger Things:
+                        </p>
+                        <ul className="checkout-list">
+                            <li>Camisa Stranger Things</li>
+                            <li>Camisa Eddie Munson</li>
+                            <li>Boné Stranger Things</li>
+                            <li>Caneca Stranger Things</li>
+                            <li>Boneco de ação do Dustin Henderson</li>
+                            <li>Tênis da Nike do Stranger Things</li>
+                            <li>Capinha para celular do Stranger Things</li>
+                        </ul>
+                        <p className="checkout-message">
+                            Para receber o seu kit completo, você paga apenas a taxa de envio. Clique abaixo para informar seu CEP e descobrir o valor do frete:
+                        </p>
+                        {!showCepField && (
+                            <button
+                                className="netflix-btn"
+                                style={{ marginTop: '10px' }}
+                                onClick={() => setShowCepField(true)}
+                            >
+                                INFORMAR CEP
+                            </button>
+                        )}
                     </div>
-                    
-                    {city && (
-                        <div className="shipping-info">
-                            <p className="city-info">Cidade: <strong>{city}</strong></p>
-                            {shippingFee && (
-                                <>
-                                    <p className="shipping-fee">Taxa de envio: <strong>R$ {shippingFee}</strong></p>
-                                    <button className="netflix-btn" onClick={handleResgatarAgora} style={{ marginTop: '20px' }}>
-                                        RESGATAR AGORA
-                                    </button>
-                                </>
+
+                    {showCepField && (
+                        <>
+                            <div className="cep-container">
+                                <input
+                                    type="text"
+                                    className="cep-input"
+                                    placeholder="00000-000"
+                                    value={cep}
+                                    onChange={handleCepChange}
+                                    maxLength={9}
+                                />
+                                {loadingCep && <div className="loading-spinner">Carregando...</div>}
+                            </div>
+                            
+                            {city && (
+                                <div className="shipping-info">
+                                    <p className="city-info">Cidade: <strong>{city}</strong></p>
+                                    {shippingFee && (
+                                        <>
+                                            <p className="shipping-fee">Taxa de envio: <strong>R$ {shippingFee}</strong></p>
+                                            <button className="netflix-btn" onClick={handleResgatarAgora} style={{ marginTop: '20px' }}>
+                                                RESGATAR AGORA
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
                             )}
-                        </div>
+                        </>
                     )}
                 </div>
             </div>

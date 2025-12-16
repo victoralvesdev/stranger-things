@@ -17,8 +17,9 @@ body {
     font-family: 'Roboto', sans-serif;
     background: #000000;
     color: #ffffff;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
